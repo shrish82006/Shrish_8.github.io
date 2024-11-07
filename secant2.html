@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cubic Equation Solver (Secant Method)</title>
+    <style>
+        /* Styling for layout and visibility */
+        button, input[type="number"], label {
+            display: block;
+            margin: 10px 0;
+        }
+        #cubicForm, #resultBox {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+        }
+        #cubicForm {
+            display: none; /* Initially hidden */
+        }
+        #resultBox {
+            display: none; /* Initially hidden */
+            background-color: #f9f9f9;
+        }
+    </style>
+    <script>
+        function showCubicForm() {
+            document.getElementById("cubicForm").style.display = "block";
+        }
+
+        function secantMethod(a, b, c, d, x0, x1, tolerance, maxIterations = 1000) {
+            function f(x) {
+                return a * x ** 3 + b * x ** 2 + c * x + d;
+            }
+
+            for (let i = 0; i < maxIterations; i++) {
+                const f0 = f(x0);
+                const f1 = f(x1);
+
+                if (Math.abs(f1 - f0) < tolerance) {
+                    return "The values of f(x0) and f(x1) are too close to each other; no solution found.";
+                }
+
+                const x2 = x1 - f1 * (x1 - x0) / (f1 - f0);
+
+                if (Math.abs(x2 - x1) < tolerance) {
+                    return x2;  // Root found
+                }
+
+                // Update guesses
+                x0 = x1;
+                x1 = x2;
+            }
+
+            return "Solution did not converge within the maximum iterations.";
+        }
+
+        function calculateRoot() {
+            const a = parseFloat(document.getElementById("a").value);
+            const b = parseFloat(document.getElementById("b").value);
+            const c = parseFloat(document.getElementById("c").value);
+            const d = parseFloat(document.getElementById("d").value);
+            const x0 = parseFloat(document.getElementById("x0").value);
+            const x1 = parseFloat(document.getElementById("x1").value);
+            const tolerance = parseFloat(document.getElementById("tolerance").value);
+
+            const root = secantMethod(a, b, c, d, x0, x1, tolerance);
+
+            const resultBox = document.getElementById("resultBox");
+            if (typeof root === "number") {
+                resultBox.innerHTML = `The root of the equation is approximately: ${root.toFixed(6)}`;
+            } else {
+                resultBox.innerHTML = root; // Display error message
+            }
+            resultBox.style.display = "block"; // Show result box
+        }
+    </script>
+</head>
+<body>
+    <h1>Cubic Equation Solver (Secant Method)</h1>
+    <button onclick="showCubicForm()">Solve Cubic Equation</button>
+
+    <!-- Form for entering cubic equation coefficients, initial guesses, and tolerance for the Secant method -->
+    <div id="cubicForm">
+        <h2>Enter Coefficients for ax³ + bx² + cx + d = 0</h2>
+        <label for="a">Coefficient a:</label>
+        <input type="number" id="a" step="any">
+        
+        <label for="b">Coefficient b:</label>
+        <input type="number" id="b" step="any">
+        
+        <label for="c">Coefficient c:</label>
+        <input type="number" id="c" step="any">
+        
+        <label for="d">Coefficient d:</label>
+        <input type="number" id="d" step="any">
+        
+        <h2>Enter Initial Guesses for Secant Method</h2>
+        <label for="x0">Initial Guess 1 (x<sub>0</sub>):</label>
+        <input type="number" id="x0" step="any">
+        
+        <label for="x1">Initial Guess 2 (x<sub>1</sub>):</label>
+        <input type="number" id="x1" step="any">
+        
+        <label for="tolerance">Tolerance:</label>
+        <input type="number" id="tolerance" step="any" value="0.000001">
+        
+        <button onclick="calculateRoot()">Calculate Root</button>
+    </div>
+
+    <!-- Result box to display the output of the root calculation -->
+    <div id="resultBox"></div>
+</body>
+</html>

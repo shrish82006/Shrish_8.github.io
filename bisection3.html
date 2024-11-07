@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cubic Equation Solver (Bisection Method)</title>
+    <style>
+        /* Styling for layout and visibility */
+        button, input[type="number"], label {
+            display: block;
+            margin: 10px 0;
+        }
+        #cubicForm, #resultBox {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+        }
+        #cubicForm {
+            display: none; /* Initially hidden */
+        }
+        #resultBox {
+            display: none; /* Initially hidden */
+            background-color: #f9f9f9;
+        }
+    </style>
+    <script>
+        function showCubicForm() {
+            document.getElementById("cubicForm").style.display = "block";
+        }
+
+        function bisectionMethod(a, b, c, d, xLower, xUpper, tolerance, maxIterations = 1000) {
+            function f(x) {
+                return a * x ** 3 + b * x ** 2 + c * x + d;
+            }
+
+            if (f(xLower) * f(xUpper) >= 0) {
+                return "The function does not change sign in the given interval. Please provide a valid interval.";
+            }
+
+            let xMid;
+            for (let i = 0; i < maxIterations; i++) {
+                xMid = (xLower + xUpper) / 2;
+                const fMid = f(xMid);
+
+                if (Math.abs(fMid) < tolerance || Math.abs(xUpper - xLower) < tolerance) {
+                    return xMid;  // Root found
+                }
+
+                if (f(xLower) * fMid < 0) {
+                    xUpper = xMid;
+                } else {
+                    xLower = xMid;
+                }
+            }
+
+            return "Solution did not converge within the maximum iterations.";
+        }
+
+        function calculateRoot() {
+            const a = parseFloat(document.getElementById("a").value);
+            const b = parseFloat(document.getElementById("b").value);
+            const c = parseFloat(document.getElementById("c").value);
+            const d = parseFloat(document.getElementById("d").value);
+            const xLower = parseFloat(document.getElementById("xLower").value);
+            const xUpper = parseFloat(document.getElementById("xUpper").value);
+            const tolerance = parseFloat(document.getElementById("tolerance").value);
+
+            const root = bisectionMethod(a, b, c, d, xLower, xUpper, tolerance);
+
+            const resultBox = document.getElementById("resultBox");
+            if (typeof root === "number") {
+                resultBox.innerHTML = `The root of the equation is approximately: ${root.toFixed(6)}`;
+            } else {
+                resultBox.innerHTML = root; // Display error message
+            }
+            resultBox.style.display = "block"; // Show result box
+        }
+    </script>
+</head>
+<body>
+    <h1>Cubic Equation Solver (Bisection Method)</h1>
+    <button onclick="showCubicForm()">Solve Cubic Equation</button>
+
+    <!-- Form for entering cubic equation coefficients, interval, and tolerance for the Bisection method -->
+    <div id="cubicForm">
+        <h2>Enter Coefficients for ax³ + bx² + cx + d = 0</h2>
+        <label for="a">Coefficient a:</label>
+        <input type="number" id="a" step="any">
+        
+        <label for="b">Coefficient b:</label>
+        <input type="number" id="b" step="any">
+        
+        <label for="c">Coefficient c:</label>
+        <input type="number" id="c" step="any">
+        
+        <label for="d">Coefficient d:</label>
+        <input type="number" id="d" step="any">
+        
+        <h2>Enter Interval for Bisection Method</h2>
+        <label for="xLower">Lower bound (x<sub>lower</sub>):</label>
+        <input type="number" id="xLower" step="any">
+        
+        <label for="xUpper">Upper bound (x<sub>upper</sub>):</label>
+        <input type="number" id="xUpper" step="any">
+        
+        <label for="tolerance">Tolerance:</label>
+        <input type="number" id="tolerance" step="any" value="0.000001">
+        
+        <button onclick="calculateRoot()">Calculate Root</button>
+    </div>
+
+    <!-- Result box to display the output of the root calculation -->
+    <div id="resultBox"></div>
+</body>
+</html>

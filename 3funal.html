@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three Buttons for Redirection</title>
+    <style>
+        /* Add spacing between buttons */
+        button {
+            display: block;   /* Each button appears on a new line */
+            margin: 10px 0;   /* Adds space above and below each button */
+            padding: 10px 20px; /* Optional: Make buttons larger for visibility */
+        }
+    </style>
+    <script>
+        // JavaScript functions to redirect to different pages
+        function redirectToPage1() {
+            window.location.href = "page1.html"; // replace with your desired URL
+        }
+
+        function redirectToPage2() {
+            window.location.href = "page2.html"; // replace with your desired URL
+        }
+
+        function redirectToPage3() {
+            window.location.href = "page3.html"; // replace with your desired URL
+        }
+    </script>
+</head>
+<body>
+    <h1>Choose your desired method:-</h1>
+    <!-- Three buttons, each on a new line -->
+    <button onclick="redirectToPage1()">Newton Raphson method</button>
+    <button onclick="redirectToPage2()">bisection method</button>
+    <button onclick="redirectToPage3()">secant method</button>
+</body>
+</html>
